@@ -20,7 +20,7 @@ let result = add(five, ten);`
 		expectedLiteral string
 	}{
 		{token.LET, "let"},
-		{token.IDENT, "five "},
+		{token.IDENT, "five"},
 		{token.ASSIGN, "="},
 		{token.INT, "5"},
 		{token.SEMICOLON , ";"},
@@ -31,7 +31,7 @@ let result = add(five, ten);`
 		{token.SEMICOLON, ";"},
 		{token.LET, "let"},
 		{token.IDENT, "add"},
-		{token.ASSIGN, "= "},
+		{token.ASSIGN, "="},
 		{token.FUNCTION, "fn"},
 		{token.LPAREN, "("},
 		{token.IDENT, "x"},
@@ -43,6 +43,7 @@ let result = add(five, ten);`
 		{token.PLUS, "+"},
 		{token.IDENT, "y"},
 		{token.SEMICOLON, ";"},
+		{token.RBRACE, "}"},
 		{token.LET, "let"},
 		{token.IDENT, "result"},
 		{token.ASSIGN, "="},

@@ -13,8 +13,19 @@ const (
 	IDENT = "IDENT"
 	INT = "INT"
 
+	// operators ( gotta add some funny ones later ;3 )
 	ASSIGN = "="
 	PLUS = "+"
+	MINUS = "-"
+	ASTERISK = "*"
+	SLASH = "/"
+
+	// logical
+	BANG = "!"
+
+	// comparison
+	LT = "<"
+	GT = ">"
 
 	COMMA = ","
 	SEMICOLON = ";"

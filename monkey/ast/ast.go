@@ -60,13 +60,27 @@ type Identifier struct {
 func (i *Identifier) expressionNode() {}
 func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
 
-type RetursStatement struct {
+type ReturnStatement struct {
 	Token token.Token // just RETURN
 	ReturnValue Expression
 }
 
-func (rs *RetursStatement) statementNode() {}
-func (rs *RetursStatement) TokenLiteral() string { return rs.Token.Literal}
+func (rs *ReturnStatement) statementNode() {}
+func (rs *ReturnStatement) TokenLiteral() string { return rs.Token.Literal}
+func (rs *ReturnStatement) String() string {
+	var out bytes.Buffer
+
+	out.WriteString(rs.TokenLiteral() + " ")
+
+	if rs.ReturnValue != nil {
+		out.WriteString(rs.ReturnValue.String())
+	}
+
+	out.WriteString(";")
+
+	return out.String()
+}
+
 
 type ExpressionStatement struct {
 	Token token.Token // first token
@@ -136,21 +150,6 @@ func (ls *LetStatement) String() string {
 
 	if ls.Value != nil {
 		out.WriteString(ls.Value.String())
-	}
-
-	out.WriteString(";")
-
-	return out.String()
-}
-
-
-func (rs *RetursStatement) String() string {
-	var out bytes.Buffer
-
-	out.WriteString(rs.TokenLiteral() + " ")
-
-	if rs.ReturnValue != nil {
-		out.WriteString(rs.ReturnValue.String())
 	}
 
 	out.WriteString(";")
@@ -241,6 +240,30 @@ func (fl *FunctionLiteral) String() string {
 	out.WriteString(strings.Join(params, ", "))
 	out.WriteString(") ")
 	out.WriteString(fl.Body.String())
+
+	return out.String()
+}
+
+type CallExpression struct {
+	Token token.Token // (
+	Function Expression // Ident or FunctionLiteral
+	Arguments []Expression
+}
+
+func (ce *CallExpression) expressionNode() {}
+func (ce *CallExpression) TokenLiteral() string { return ce.Token.Literal }
+func (ce *CallExpression) String() string {
+	var out bytes.Buffer
+
+	args := []string{}
+	for _, a := range ce.Arguments {
+		args = append(args, a.String())
+	}
+
+	out.WriteString(ce.Function.String())
+	out.WriteString("(")
+	out.WriteString(strings.Join(args, ", "))
+	out.WriteString(")")
 
 	return out.String()
 }

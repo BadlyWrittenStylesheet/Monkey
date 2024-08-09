@@ -43,6 +43,7 @@ func (p *Program) String() string {
 	return out.String()
 }
 
+
 type LetStatement struct {
 	Token token.Token // token.LET i presume?
 	Name *Identifier
@@ -220,7 +221,7 @@ func (bs *BlockStatement) String() string {
 
 
 type FunctionLiteral struct {
-	Token token.Token
+	Token token.Token // 'fn'
 	Parameters []*Identifier
 	Body *BlockStatement
 }

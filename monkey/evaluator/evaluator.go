@@ -13,75 +13,6 @@ var (
 	NULL	= &object.Null{}
 )
 
-// func Eval(node ast.Node, env *object.Enviroment) object.Object {
-//     fmt.Println("Evaluating node:", node)
-//     fmt.Println("Current environment:", env)
-
-//     switch node := node.(type) {
-//     case *ast.Program:
-//         return evalProgram(node, env)
-//     case *ast.ExpressionStatement:
-//         return Eval(node.Expression, env)
-//     case *ast.PrefixExpression:
-//         right := Eval(node.Right, env)
-//         if isError(right) {
-//             return right
-//         }
-//         return evalPrefixExpression(node.Operator, right)
-//     case *ast.InfixExpression:
-//         left := Eval(node.Left, env)
-//         if isError(left) {
-//             return left
-//         }
-//         right := Eval(node.Right, env)
-//         if isError(right) {
-//             return right
-//         }
-//         return evalInfixExpression(node.Operator, left, right)
-//     case *ast.BlockStatement:
-//         return evalBlockStatement(node, env)
-//     case *ast.IfExpression:
-//         return evalIfExpression(node, env)
-//     case *ast.ReturnStatement:
-//         val := Eval(node.ReturnValue, env)
-//         if isError(val) {
-//             return val
-//         }
-//         return &object.ReturnValue{Value: val}
-//     case *ast.FunctionLiteral:
-//         params := node.Parameters
-//         body := node.Body
-//         return &object.Function{Parameters: params, Env: env, Body: body}
-//     case *ast.CallExpression:
-//         function := Eval(node.Function, env)
-//         if isError(function) {
-//             return function
-//         }
-//         args := evalExpressions(node.Arguments, env)
-//         if len(args) == 1 && isError(args[0]) {
-//             return args[0]
-//         }
-//         result := applyFunction(function, args)
-//         fmt.Println("Result after function application:", result)
-//         return result
-//     case *ast.LetStatement:
-//         val := Eval(node.Value, env)
-//         if isError(val) {
-//             return val
-//         }
-//         env.Set(node.Name.Value, val)
-//     case *ast.Identifier:
-//         return evalIdentifier(node, env)
-//     case *ast.IntegerLiteral:
-//         return &object.Integer{Value: node.Value}
-//     case *ast.Boolean:
-//         return nativeBoolToBooleanObject(node.Value)
-//     }
-
-//     return nil
-// }
-
-
 func Eval(node ast.Node, env *object.Enviroment) object.Object {
 	switch node := node.(type) {
 
@@ -152,28 +83,14 @@ func Eval(node ast.Node, env *object.Enviroment) object.Object {
 	return nil
 }
 
-// func applyFunction(fn object.Object, args []object.Object) object.Object {
-//     function, ok := fn.(*object.Function)
-//     if !ok {
-//         return newError("not a function: %s", fn.Type())
-//     }
-
-    // extendedEnv := extendFunctionEnv(function, args)
-    // evaluated := Eval(function.Body, extendedEnv)
-    // return unwrapReturnValue(evaluated)
-// }
-
 func applyFunction(fn object.Object, args []object.Object) object.Object {
-    fmt.Println("Applying function:", fn)
     function, ok := fn.(*object.Function)
     if !ok {
         return newError("not a function: %s", fn.Type())
     }
 
     extendedEnv := extendFunctionEnv(function, args)
-    fmt.Println("Extended environment for function:", extendedEnv)
     evaluated := Eval(function.Body, extendedEnv)
-    fmt.Println("Evaluated function body:", evaluated)
     return unwrapReturnValue(evaluated)
 }
 
@@ -219,43 +136,19 @@ func newError(format string, a ...interface{}) *object.Error {
 }
 
 func evalIfExpression(ie *ast.IfExpression, env *object.Enviroment) object.Object {
-    condition := Eval(ie.Condition, env)
+	condition := Eval(ie.Condition, env)
     if isError(condition) {
         return condition
     }
 
-    fmt.Println("Condition evaluated to:", condition) // Debug print
-
-    if isTruthy(condition) {
-        result := Eval(ie.Consequence, env)
-        fmt.Println("Consequence:", ie.Consequence, ". Evaluated:", Eval(ie.Consequence, env))
-        fmt.Println("Consequence evaluated to:", ie.Consequence, result) // Debug print
-        return result
-    } else if ie.Alternative != nil {
-        result := Eval(ie.Alternative, env)
-        fmt.Println("Alternative evaluated to:", result) // Debug print
-        return result
-    } else {
-        fmt.Println("No alternative, returning NULL") // Debug print
-        return NULL
-    }
+	if isTruthy(condition) {
+		return Eval(ie.Consequence, env)
+	} else if ie.Alternative != nil {
+		return Eval(ie.Alternative, env)
+	} else {
+		return NULL
+	}
 }
-
-
-// func evalIfExpression(ie *ast.IfExpression, env *object.Enviroment) object.Object {
-// 	condition := Eval(ie.Condition, env)
-//     if isError(condition) {
-//         return condition
-//     }
-
-// 	if isTruthy(condition) {
-// 		return Eval(ie.Consequence, env)
-// 	} else if ie.Alternative != nil {
-// 		return Eval(ie.Alternative, env)
-// 	} else {
-// 		return NULL
-// 	}
-// }
 
 func isTruthy(obj object.Object) bool {
 	switch obj {

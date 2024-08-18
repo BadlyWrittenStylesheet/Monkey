@@ -331,6 +331,7 @@ func (p *Parser) ParseProgram() *ast.Program {
 
 	for p.curToken.Type != token.EOF {
 		stmt := p.parseStatement()
+        fmt.Println("ParseProgram(): parsed statement:", stmt)
 		if stmt != nil {
 			program.Statements = append(program.Statements, stmt)
 		}

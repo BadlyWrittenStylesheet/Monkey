@@ -81,6 +81,10 @@ func Eval(node ast.Node, env *object.Enviroment) object.Object {
         }
         return evalIndexExpression(left, index)
 	// Exprss
+    case *ast.HashLiteral:
+        evaluated := evalHashLiteral(node, env)
+        fmt.Println("Evaluating Hash Literal to:", evaluated, "from:", node)
+        return evaluated
     case *ast.ArrayLiteral:
         elements := evalExpressions(node.Elements, env)
         if len(elements) == 1 && isError(elements[0]) {
@@ -94,8 +98,35 @@ func Eval(node ast.Node, env *object.Enviroment) object.Object {
 	case *ast.Boolean:
 		return nativeBoolToBooleanObject(node.Value)
 	}
+    fmt.Println("No eval func found for:", node)
 
 	return nil
+}
+
+func evalHashLiteral(node *ast.HashLiteral, env *object.Enviroment) object.Object {
+    pairs := make(map[object.HashKey]object.HashPair)
+
+    for keyNode, valueNode := range node.Pairs {
+        key := Eval(keyNode, env)
+
+        if isError(key) {
+            return key
+        }
+
+        hashKey, ok := key.(object.Hashable)
+        if !ok {
+            return newError("unusable as hash key: %s", key.Type())
+        }
+
+        value := Eval(valueNode, env)
+        if isError(value) {
+            return value
+        }
+
+        hashed := hashKey.HashKey()
+        pairs[hashed] = object.HashPair{Key: key, Value: value}
+    }
+    return &object.Hash{Pairs: pairs}
 }
 
 func evalIndexExpression(left, index object.Object) object.Object {

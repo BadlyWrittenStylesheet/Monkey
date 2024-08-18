@@ -140,6 +140,8 @@ type Lexer struct {
 	position int
 	readPosition int
 	ch byte
+    // currentChar int64
+    // currentCol int64
 }
 
 func New(input string) *Lexer {
@@ -154,6 +156,12 @@ func (l *Lexer) readChar() {
 	} else {
 		l.ch = l.input[l.readPosition]
 	}
+    if l.ch == '\n' {
+        // l.currentCol += 1
+        // l.currentChar = 0
+    }
 	l.position = l.readPosition
 	l.readPosition += 1
+    // l.currentChar += 1
+    // fmt.Printf("Advance lexer to row: %d col: %d with value: '%s'\n", l.currentChar, l.currentCol, string(l.ch))
 }

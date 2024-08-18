@@ -83,7 +83,6 @@ func Eval(node ast.Node, env *object.Enviroment) object.Object {
 	// Exprss
     case *ast.HashLiteral:
         evaluated := evalHashLiteral(node, env)
-        fmt.Println("Evaluating Hash Literal to:", evaluated, "from:", node)
         return evaluated
     case *ast.ArrayLiteral:
         elements := evalExpressions(node.Elements, env)
@@ -98,7 +97,6 @@ func Eval(node ast.Node, env *object.Enviroment) object.Object {
 	case *ast.Boolean:
 		return nativeBoolToBooleanObject(node.Value)
 	}
-    fmt.Println("No eval func found for:", node)
 
 	return nil
 }
@@ -133,9 +131,27 @@ func evalIndexExpression(left, index object.Object) object.Object {
     switch {
     case left.Type() == object.ARRAY_OBJ && index.Type() == object.INTEGER_OBJ:
         return evalArrayIndexExpression(left, index)
+    case left.Type() == object.HASH_OBJ:
+        return evalHashIndexExpression(left, index)
     default:
         return newError("index operator not supported: %s", left.Type())
     }
+}
+
+func evalHashIndexExpression(hash, index object.Object) object.Object {
+    hashObject := hash.(*object.Hash)
+    key, ok := index.(object.Hashable)
+
+    if !ok {
+        return newError("unusable as hash key: %s", index.Type())
+    }
+
+    pair, ok := hashObject.Pairs[key.HashKey()]
+    if !ok {
+        return NULL
+    }
+
+    return pair.Value
 }
 
 func evalArrayIndexExpression(array, index object.Object) object.Object {

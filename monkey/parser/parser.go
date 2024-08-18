@@ -41,6 +41,8 @@ type Parser struct  {
 	curToken token.Token
 	peekToken token.Token
 
+    // char int64
+
 	prefixParseFns map[token.TokenType]prefixParseFn
 	infixParseFns map[token.TokenType]infixParseFn
 }
@@ -235,16 +237,16 @@ func (p *Parser) parseFunctionParameters() []*ast.Identifier {
 func (p *Parser) parseIfExpression() ast.Expression {
 	expression := &ast.IfExpression{Token: p.curToken}
 
-	if !p.expectPeek(token.LPAREN) {
-		return nil
-	}
+	// if !p.expectPeek(token.LPAREN) {
+	// 	return nil
+	// }
 
 	p.nextToken()
 	expression.Condition = p.parseExpression(LOWEST)
 
-	if !p.expectPeek(token.RPAREN) {
-		return nil
-	}
+	// if !p.expectPeek(token.RPAREN) {
+	// 	return nil
+	// }
 	
 	if !p.expectPeek(token.LBRACE) {
 		return nil
@@ -323,6 +325,8 @@ func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
 func (p *Parser) nextToken() {
 	p.curToken = p.peekToken
 	p.peekToken = p.l.NextToken()
+    // p.char += 1
+    // fmt.Printf("Moved to char: %d with val: %q\n", p.char, p.curToken.Literal)
 }
 
 func (p *Parser) ParseProgram() *ast.Program {
@@ -331,7 +335,6 @@ func (p *Parser) ParseProgram() *ast.Program {
 
 	for p.curToken.Type != token.EOF {
 		stmt := p.parseStatement()
-        fmt.Println("ParseProgram(): parsed statement:", stmt)
 		if stmt != nil {
 			program.Statements = append(program.Statements, stmt)
 		}

@@ -1,12 +1,5 @@
-var five = 5;
-var ten = 10;
-
-var add = fun(x, y) {
-	x + y;
-};
-
-var result = add(five, ten)
-
-
-
+let key = "interests";
+let i = 2;
+let stuff = {"name": "Julian", "age": 1, "interests": ["cryptography", "math", "programming"]};
+puts(stuff[key][i])
 

@@ -1,19 +1,26 @@
 package main
 
 import (
+	"BadlyWrittenStylesheet/Monkey/monkey/evaluator"
+	"BadlyWrittenStylesheet/Monkey/monkey/lexer"
+	"BadlyWrittenStylesheet/Monkey/monkey/object"
+	"BadlyWrittenStylesheet/Monkey/monkey/parser"
 	"fmt"
 	"os"
-	"os/user"
-	"BadlyWrittenStylesheet/Monkey/monkey/repl"
 )
 
 func main() {
-	user, err := user.Current()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("Hello %s! This is the ultimate programming language, MONKEY\n", user.Username)
-	fmt.Printf("Feel free to write some commands\n")
-	repl.Start(os.Stdin, os.Stdout)
+    filePath := os.Args[1]
+    code, err := os.ReadFile(filePath)
+    if err != nil {
+        fmt.Printf("File %s does not exist or can not be opened?\n", filePath)
+        return
+    }
+	l := lexer.New(string(code))
+	p := parser.New(l)
+	program := p.ParseProgram()
+    env := object.NewEnviroment()
+    res := evaluator.Eval(program, env)
+    fmt.Println(res)
 }
 

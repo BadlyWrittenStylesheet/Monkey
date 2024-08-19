@@ -37,21 +37,34 @@ My Interpreter is a simple programming language interpreter written in Go, inspi
 
 Run the interpreter with:
    ```
-   ./interpreter main.monkey
+   ./monkey banana.monkey
    ```
 
 ### Example
 
-Create a file named `example.txt` with the following content:
+Create a file named `banana.monkey` with the following content:
    ```
    let x = 5;
    let y = 10;
-   puts(x * y)
+   if x > y {
+      puts("Hello!")
+   } else {
+      puts("World!")
+   }
+   puts(2 + 3);
+   let arr = [1, 2, 3];
+   puts(arr[2]);
+   let person = {"name": "Julian", "age": -1, "interests": ["cryptography", "math", "programming"]};
+   let getFirstInterest = fn(x) {
+       return x["interests"][0];
+   };
+   puts(getFirstInterest(person));
+   puts(person["interests"][0]);
    ```
 
 Run the interpreter:
    ```
-   ./interpreter main.monkey
+   ./monkey banana.monkey
    ```
 
 ## License
@@ -60,7 +73,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Thorsten Ball for the inspirational book *Writing an Interpreter in Go*.
+- Thorsten Ball for the inspirational book *Writing an Interpreter in Go*. He is such a smart guy, really.
 - The Go Programming Language for the powerful language used.
 - Me
-- ChatGpt for this readme ( I truly cannot )
+- ChatGPT on behalf of ClosedAI for this readme ( I truly cannot )

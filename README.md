@@ -1,7 +1,6 @@
 # Monkey Language Interpreter in Golang
-## Overview
 
-My Interpreter is a simple programming language interpreter written in Go, inspired by Thorsten Ball's *Writing an Interpreter in Go*. This project demonstrates fundamental concepts of language design, including lexical analysis, parsing, and interpretation.
+My Interpreter is a simple programming language interpreter written in Go, inspired by Thorsten Ball's *Writing an Interpreter in Go*. Features fundamental concepts of language design, including lexical analysis, parsing, and interpretation.
 
 ## Features
 
@@ -12,15 +11,11 @@ My Interpreter is a simple programming language interpreter written in Go, inspi
 
 ## Getting Started
 
-### Prerequisites
-
-- Go version something?
-
 ### Installation
 
 1. Clone the repository:
    ```
-   git clone https://github.com/BadlyWrittenStylesheet/Monkey.git
+   git clone https://github.com/ish7o/Monkey.git
    ```
 
 2. Navigate to the project directory:
@@ -67,13 +62,4 @@ Run the interpreter:
    ./monkey banana.monkey
    ```
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Thorsten Ball for the inspirational book *Writing an Interpreter in Go*. He is such a smart guy, really.
-- The Go Programming Language for the powerful language used.
-- Me
-- ChatGPT on behalf of ClosedAI for this readme ( I truly cannot )
+Huge thank you to Thorsten Ball for the inspirational book *Writing an Interpreter in Go*.
